@@ -1,4 +1,9 @@
-module.exports = function(sequelize, DataTypes) {
+const sequelize = require("../db");
+const {Sequelize} = require("sequelize");
+
+const Game = defineGameModel(sequelize, Sequelize);
+
+function defineGameModel (sequelize, DataTypes) {
     return sequelize.define('game', {
         title: {
             type: DataTypes.STRING(25),
@@ -36,3 +41,5 @@ module.exports = function(sequelize, DataTypes) {
         }
     })
 }
+
+module.exports = Game
