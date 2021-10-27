@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../db').import("../models/user.js");
 
-module.exports = function (req, res, next) {
+module.exports = (req, res, next) => {
     if (req.method == 'OPTIONS') {
         next();   // allowing options as a method for request
     } else {
@@ -11,12 +11,15 @@ module.exports = function (req, res, next) {
         else {
             jwt.verify(sessionToken, 'lets_play_sum_games_man', (err, decoded) => {
                 if (decoded) {
-                    User.findOne({ where: { id: decoded.id } }).then(user => {
-                        req.user = user;
-                        console.log(`user: ${user}`)
-                        next()
-                    },
-                        function () {
+                    User.findOne({
+                        where: {id: decoded.id}
+                    })
+                        .then(user => {
+                            req.user = user;
+                            console.log(`user: ${user}`)
+                            next()
+                        })
+                        .catch( () => {
                             res.status(401).send({ error: "not authorized" });
                         })
 
